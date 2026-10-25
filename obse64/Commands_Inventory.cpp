@@ -182,7 +182,7 @@ bool Cmd_GetInventoryItemType_Execute(COMMAND_ARGS)
 	if(TESForm * type = GetItemByIdx(thisObj, objIdx, nullptr))
 	{
 		refID = type->refID;
-		*((u32 *)result) = refID;
+		SetFormResult(result, refID);
 	}
 
 	if(IsConsoleMode())
@@ -386,11 +386,10 @@ class feGetObject: public FoundEquipped
 {
 public:
 	virtual bool Found(ExtraContainerChanges::Entry * entryData, double * result, BSSimpleList <ExtraDataList *>::Node * extendData) {
-		u32 * refResult = (u32 *)result;
 		if(entryData) {
-			*refResult = entryData->type->refID;
+			SetFormResult(result, entryData->type->refID);
 
-			//Console_Print("refID = %08X (%s)", *refResult, GetFullName(entry->data->type));
+			//Console_Print("refID = %08X (%s)", entryData->type->refID, GetFullName(entry->data->type));
 			return true;
 		}
 		return false;
@@ -399,9 +398,7 @@ public:
 
 static bool Cmd_GetEquipmentSlotType_Execute(COMMAND_ARGS)
 {
-	u32 * refResult = (u32 *)result;
-
-	*refResult = 0;
+	*result = 0;
 
 	// easy out if we don't have an object
 	if(!thisObj) return true;
@@ -417,7 +414,7 @@ static bool Cmd_GetEquipmentSlotType_Execute(COMMAND_ARGS)
 			Console_Print("Nothing equipped in that slot.");
 		else
 		{
-			TESForm * eqObj = LookupFormByID(*refResult);
+			TESForm * eqObj = LookupFormByID(FormIDFromValue(*result));
 			if(eqObj)
 				Console_Print("GetEquippedObject %d >> %s (%08x)", slotIdx, GetFullName(eqObj), eqObj->refID);
 		}

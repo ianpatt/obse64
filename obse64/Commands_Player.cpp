@@ -9,18 +9,17 @@ class SpellItem;
 
 static bool Cmd_GetActiveSpell_Execute(COMMAND_ARGS)
 {
-	u32 * refResult = (u32 *)result;
 	MagicItem * activeMagicItem = CALL_MEMBER_FN(PlayerCharacter::Get(), GetActiveMagicItem)();
 
-	*refResult = 0;
+	*result = 0;
 
 	auto * activeMagicItemForm = DYNAMIC_CAST(activeMagicItem, MagicItem, TESForm);
 	if(activeMagicItemForm)
-		*refResult = activeMagicItemForm->refID;
+		SetFormResult(result, activeMagicItemForm->refID);
 
 	if(IsConsoleMode())
 	{
-		Console_Print("GetActiveSpell >> %08X (%s)", *refResult, GetFullName(activeMagicItemForm));
+		Console_Print("GetActiveSpell >> %08X (%s)", activeMagicItemForm ? activeMagicItemForm->refID : 0, GetFullName(activeMagicItemForm));
 	}
 
 	return true;

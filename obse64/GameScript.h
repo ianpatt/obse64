@@ -131,6 +131,19 @@ typedef bool (* _ExtractArgs)(
 	...);
 extern RelocAddr <_ExtractArgs> ExtractArgs;
 
+// Script values are doubles, and the Remastered keeps a form in one as its form ID's number,
+// (double)refID, not as classic Oblivion's raw form ID bits: the game's own commands store
+// their results that way (RVA 0x06630DD0), and ref variables are converted back from the number.
+inline void SetFormResult(double * result, u32 refID)
+{
+	*result = double(refID);
+}
+
+inline u32 FormIDFromValue(double value)
+{
+	return u32(s64(value));
+}
+
 #define COMMAND_ARGS		const ParamInfo * paramInfo, const char * scriptData, TESObjectREFR * thisObj, TESObjectREFR * containingObj, Script * script, ScriptLocals * locals, double * result, u32 * opcodeOffsetPtr
 #define PASS_COMMAND_ARGS	paramInfo, scriptData, thisObj, containingObj, script, locals, result, opcodeOffsetPtr
 #define EXTRACT_ARGS		paramInfo, scriptData, opcodeOffsetPtr, thisObj, containingObj, script, locals

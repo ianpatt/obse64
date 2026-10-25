@@ -6,8 +6,7 @@
 
 static bool Cmd_GetParentCell_Execute(COMMAND_ARGS)
 {
-	u32 * refResult = (u32 *)result;
-	*refResult = 0;
+	*result = 0;
 
 	if(!thisObj) return true;
 
@@ -15,7 +14,7 @@ static bool Cmd_GetParentCell_Execute(COMMAND_ARGS)
 
 	if(currentCell) {
 		if(IsConsoleMode()) Console_Print("Cell: %08x", currentCell->refID);
-		*refResult = currentCell->refID;
+		SetFormResult(result, currentCell->refID);
 	}
 
 	return true;
